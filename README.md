@@ -11,9 +11,7 @@ import "github.com/mrsln/tomita"
 
 func main() {
 	p, err := tomita.New("/bin/tomita", "example/config.proto")
-	...
 	output, err := p.Run("This is text to parse")
-	...
 }
 
 ```
