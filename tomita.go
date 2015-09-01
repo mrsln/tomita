@@ -1,4 +1,4 @@
-// tomita это обертка для Томита-парсер
+// tomita – это обертка для Томита-парсера
 package tomita
 
 import (
@@ -10,7 +10,7 @@ import (
 	"path"
 )
 
-// Parser это класс для работы с томитой
+// Parser это класс для работы с Томитой
 type Parser struct {
 	execPath string
 	confPath string
@@ -24,10 +24,10 @@ func New(execPath, confPath string) (Parser, error) {
 		os.Chdir(confDir)
 	}
 	if _, err := os.Stat(execPath); os.IsNotExist(err) { // TODO: check if it's executable
-		return Parser{}, errors.New("the tomita path doesn't exist")
+		return Parser{}, errors.New("the tomita path doesn't exist: " + execPath)
 	}
 	if _, err := os.Stat(confPath); os.IsNotExist(err) {
-		return Parser{}, errors.New("the tomita path doesn't exist")
+		return Parser{}, errors.New("the config path doesn't exist: " + confPath)
 	}
 	tp := Parser{
 		execPath: execPath,
