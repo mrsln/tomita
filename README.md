@@ -7,13 +7,10 @@ Go Tomita Parser wrapper
 ------
 
 ```go
-import (
-	"fmt"
-	"github.com/mrsln/tomita"
-)
+import "github.com/mrsln/tomita"
 
 func main() {
-	p, _ := tomita.New("/home/user/tomita-parser", "/home/user/config.proto")
+	p, _ := tomita.New("/bin/tomita", "example/config.proto")
 	output, err := p.Run("This is text to parse")
 	...
 }
