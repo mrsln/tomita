@@ -9,16 +9,13 @@ Go Tomita Parser wrapper
 ```go
 import (
 	"fmt"
-	"github.com/makhov/go-tomita"
+	"github.com/mrsln/tomita"
 )
 
 func main() {
 	p, _ := tomita.New("/home/user/tomita-parser", "/home/user/config.proto")
-	p.SetDebug(true)
 	output, err := p.Run("This is text to parse")
-	if err != nil {
-		...	
-	}
+	...
 }
 
 ```
