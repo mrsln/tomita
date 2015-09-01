@@ -1,43 +1,44 @@
+// tomita это обертка для Томита-парсер
 package tomita
 
 import (
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
+	"path"
 )
 
-// Parser это конфиг, в котором сохраняется путь до томиты и вашего конфига
+// Parser это класс для работы с томитой
 type Parser struct {
 	execPath string
 	confPath string
-	debug    bool
 }
 
 // New создает инстанс парсера
 func New(execPath, confPath string) (Parser, error) {
-	tp := Parser{
-		execPath,
-		confPath,
-		false,
+	confDir := path.Dir(confPath)
+	if confDir != "." {
+		confPath = path.Base(confPath)
+		os.Chdir(confDir)
 	}
+	if _, err := os.Stat(execPath); os.IsNotExist(err) { // TODO: check if it's executable
+		return Parser{}, errors.New("the tomita path doesn't exist")
+	}
+	if _, err := os.Stat(confPath); os.IsNotExist(err) {
+		return Parser{}, errors.New("the tomita path doesn't exist")
+	}
+	tp := Parser{
+		execPath: execPath,
+		confPath: confPath,
+	}
+
 	return tp, nil
-}
-
-// Debug устанавливает многословный режим
-func (tp *Parser) Debug(debug bool) {
-	tp.debug = debug
-}
-
-// SetDebug is deprecated
-func (tp *Parser) SetDebug(debug bool) {
-	log.Printf("SetDebug is deprecated. Use tp.Debug(%t).", debug)
 }
 
 // Run запускает парсер и считывает вывод
 func (tp *Parser) Run(text string) (string, error) {
-	tp.debugMsg("Run Tomita")
-
 	cmd := exec.Command(tp.execPath, tp.confPath)
 
 	stdin, err := cmd.StdinPipe()
@@ -58,7 +59,6 @@ func (tp *Parser) Run(text string) (string, error) {
 		return "", err
 	}
 
-	tp.debugMsg("Write input")
 	_, err = stdin.Write([]byte(text))
 	if err != nil {
 		panic("Tomita probably hasn't waited for the input. It can be caused by an error in config.proto. " +
@@ -66,19 +66,10 @@ func (tp *Parser) Run(text string) (string, error) {
 	}
 	stdin.Close()
 
-	tp.debugMsg("Read output")
 	output, err := ioutil.ReadAll(stdout)
 	panicOnErr(err)
 
-	tp.debugMsg(fmt.Sprintf("Output: \"%s\"", string(output)))
-
 	return string(output), nil
-}
-
-func (tp *Parser) debugMsg(message string) {
-	if tp.debug {
-		log.Print(message)
-	}
 }
 
 func panicOnErr(err error) {
