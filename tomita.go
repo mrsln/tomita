@@ -53,10 +53,10 @@ type Lead struct {
 	Text string `xml:"text,attr"`
 }
 
-// Result очищенный ответ, после парсинга xml
+// Result преобразованный, в удобную структуру, ответ томиты
 type Result struct {
-	Facts []Fact
-	Leads []Lead
+	Facts map[string][]map[string]string
+	Leads []string
 }
 
 // New создает инстанс парсера
@@ -118,7 +118,26 @@ func (tp *Parser) Run(text string) (Result, error) {
 		return Result{}, err
 	}
 
-	r := Result{Facts: out.Document.Facts.Facts, Leads: out.Document.Leads}
+	// преобразование ответа томиты в нужную структуру
+	r := Result{
+		Facts: make(map[string][]map[string]string),
+	}
+	for _, lead := range out.Document.Leads {
+		r.Leads = append(r.Leads, lead.Text)
+	}
+
+	for _, fact := range out.Document.Facts.Facts {
+		var values = make(map[string]string)
+		for _, value := range fact.Values {
+			values[value.XMLName.Local] = value.Value
+		}
+
+		if _, ok := r.Facts[fact.XMLName.Local]; ok {
+			r.Facts[fact.XMLName.Local] = append(r.Facts[fact.XMLName.Local], values)
+		} else {
+			r.Facts[fact.XMLName.Local] = []map[string]string{values}
+		}
+	}
 
 	return r, nil
 }

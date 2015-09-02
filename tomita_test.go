@@ -21,17 +21,16 @@ func TestRun(t *testing.T) {
 	out, err := p.Run(string(txt))
 	fatalOnErr(err, t)
 
-	if len(out.Leads) == 0 || len(out.Facts) == 0 {
+	if len(out.Leads) == 0 || out.Facts == nil {
 		t.Fatalf("the parser didn't parse anything: %#v", out)
 	}
 	t.Log("the facts are: ")
-	for _, fact := range out.Facts {
-		str := fact.XMLName.Local + ": ["
-		for _, value := range fact.Values {
-			str += value.XMLName.Local + ": " + value.Value + ", "
+	for factsGroupName, facts := range out.Facts {
+		for _, values := range facts {
+			for factName, val := range values {
+				t.Log(factsGroupName + ": " + factName + ": " + val)
+			}
 		}
-		str += "]"
-		t.Log(str)
 	}
 }
 
