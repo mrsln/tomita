@@ -2,23 +2,36 @@ package tomita
 
 import (
 	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestRun(t *testing.T) {
-	txt, err := ioutil.ReadFile("example/text.txt")
-	fatalOnErr(err, t)
-
 	p, err := New("/bin/tomita", "example/config.proto")
 	fatalOnErr(err, t)
 
-	str, err := p.Run(string(txt))
+	wd, _ := os.Getwd()
+	if p.originalWd != wd {
+		t.Fatal("wrong original working directory: " + p.originalWd)
+	}
+
+	txt, err := ioutil.ReadFile("example/text.txt")
 	fatalOnErr(err, t)
 
-	t.Log(str)
+	out, err := p.Run(string(txt))
+	fatalOnErr(err, t)
 
-	if len(str) == 0 {
-		t.Fatal("the parser didn't parse anything")
+	if len(out.Leads) == 0 || len(out.Facts) == 0 {
+		t.Fatalf("the parser didn't parse anything: %#v", out)
+	}
+	t.Log("the facts are: ")
+	for _, fact := range out.Facts {
+		str := fact.XMLName.Local + ": ["
+		for _, value := range fact.Values {
+			str += value.XMLName.Local + ": " + value.Value + ", "
+		}
+		str += "]"
+		t.Log(str)
 	}
 }
 
