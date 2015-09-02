@@ -8,10 +8,8 @@ Tomita-parser wrapper in Go
 
 ```go
 
-func main() {
-	p, err := tomita.New("/bin/tomita", "example/config.proto")
-	output, err := p.Run("This is a text to parse")
-}
+p, err := tomita.New("/bin/tomita", "example/config.proto")
+output, err := p.Run("This is a text to parse")
 
 ```
 
