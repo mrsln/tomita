@@ -1,17 +1,16 @@
-Go Tomita Parser wrapper
+Tomita-parser wrapper in Go
 ========================
 
-Небольшой враппер для удобной работы с Томита Парсер от Яндекса в Go.
+Обертка [Томита-парсера](https://tech.yandex.ru/tomita/) в Go.
 
 Пример
 ------
 
 ```go
-import "github.com/mrsln/tomita"
 
 func main() {
 	p, err := tomita.New("/bin/tomita", "example/config.proto")
-	output, err := p.Run("This is text to parse")
+	output, err := p.Run("This is a text to parse")
 }
 
 ```
@@ -20,6 +19,3 @@ func main() {
 -----
 
 - config.proto не должен содержать дескрипторов File (ввод/вывод осуществляется через STDIN/STDOUT)
-
-
-За пример спасибо автору [poor-python-yandex-tomita-parser](https://github.com/vas3k/poor-python-yandex-tomita-parser).

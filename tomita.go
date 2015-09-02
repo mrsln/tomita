@@ -20,33 +20,40 @@ type Parser struct {
 
 // Output является структурой ответа Томиты
 type Output struct {
-	Document Document `xml:"document"`
+	Document document `xml:"document"`
 }
 
-type Document struct {
-	Facts Facts  `xml:"facts"`
+type document struct {
+	Facts facts  `xml:"facts"`
 	Leads []Lead `xml:"Leads>Lead"`
 }
 
-type Facts struct {
+type facts struct {
 	Facts []Fact `xml:",any"`
 }
 
+// Fact содержит факт
 type Fact struct {
+	// Название фактов
 	XMLName xml.Name
-	Values  []FactValue `xml:",any"`
+	// факты со значением
+	Values []FactValue `xml:",any"`
 }
 
+// FactValue это конкретное значение из факта
 type FactValue struct {
+	// название факта
 	XMLName xml.Name
-	Value   string `xml:"val,attr"`
+	// спарсенное значение
+	Value string `xml:"val,attr"`
 }
 
+// Lead это предложение содержащее факт
 type Lead struct {
 	Text string `xml:"text,attr"`
 }
 
-// очищенный ответ томиты
+// Result очищенный ответ, после парсинга xml
 type Result struct {
 	Facts []Fact
 	Leads []Lead
