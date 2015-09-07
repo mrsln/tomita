@@ -26,9 +26,9 @@ func TestRun(t *testing.T) {
 		t.Fatalf("the parser didn't parse anything: %#v", out)
 	}
 
-	shouldBe := Result{Facts: map[string][]map[string]string{"Group": []map[string]string{map[string]string{"Name": "ГРУППА LOUNA"}}, "Album": []map[string]string{map[string]string{"Name": "АЛЬБОМА  МЫ — ЭТО LOUNA !"}, map[string]string{"Name": "АЛЬБОМ  ПРОСНИСЬ И ПОЙ"}}}, Leads: []string{"4 апреля в клубе \"РОК-СИТИ\"  даст большой сольный концерт, приуроченный к выходу своего нового , над которым музыканты сейчас работают в студии.", "В этом году музыканты успели выпустить концертный DVD и живой , с размахом провести его презентацию в клубе \"ARENA Moscow\", съездить в масштабный тур по России и СНГ и выступить на двадцати летних фестивалях."}}
+	shouldBe := Result{Facts: map[string][]map[string]string{"Group": []map[string]string{map[string]string{"Name": "ГРУППА LOUNA"}}, "Album": []map[string]string{map[string]string{"Name": "АЛЬБОМА  МЫ — ЭТО LOUNA !"}, map[string]string{"Name": "АЛЬБОМ  ПРОСНИСЬ И ПОЙ"}}}, Leads: []string{"4 апреля в клубе \"РОК-СИТИ\" группа Louna даст большой сольный концерт, приуроченный к выходу своего нового альбома \"Мы — это Louna!\", над которым музыканты сейчас работают в студии.", "В этом году музыканты успели выпустить концертный DVD и живой альбом \"Проснись и пой\", с размахом провести его презентацию в клубе \"ARENA Moscow\", съездить в масштабный тур по России и СНГ и выступить на двадцати летних фестивалях."}}
 	if !reflect.DeepEqual(out, shouldBe) {
-		t.Fatalf("unexpected reply:\n %v \nshould be: \n %v\n", out, shouldBe)
+		t.Fatalf("unexpected reply:\n %#v \nshould be: \n %#v\n", out, shouldBe)
 	}
 
 	t.Log("the facts are: ")

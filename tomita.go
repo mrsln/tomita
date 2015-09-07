@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"regexp"
 )
 
 // Parser это класс для работы с Томитой
@@ -126,6 +127,9 @@ func (tp *Parser) Run(text string) (Result, error) {
 		Facts: make(map[string][]map[string]string),
 	}
 	for _, lead := range out.Document.Leads {
+		var openP = regexp.MustCompile(`<[A-Z]\s[^>]+>([^<]+)</[A-Z]>`)
+		lead.Text = openP.ReplaceAllString(lead.Text, "$1")
+
 		var l Llead
 		err = xml.Unmarshal([]byte(lead.Text), &l)
 		r.Leads = append(r.Leads, l.Text)
