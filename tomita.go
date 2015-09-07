@@ -5,7 +5,6 @@ import (
 	"encoding/xml"
 	"errors"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -140,10 +139,4 @@ func (tp *Parser) Run(text string) (Result, error) {
 	}
 
 	return r, nil
-}
-
-func panicOnErr(err error) {
-	if err != nil {
-		log.Panic(err)
-	}
 }
