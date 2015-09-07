@@ -52,6 +52,10 @@ type Lead struct {
 	Text string `xml:"text,attr"`
 }
 
+type Llead struct {
+	Text string `xml:"b>s"`
+}
+
 // Result преобразованный, в удобную структуру, ответ томиты
 type Result struct {
 	Facts map[string][]map[string]string
@@ -122,7 +126,9 @@ func (tp *Parser) Run(text string) (Result, error) {
 		Facts: make(map[string][]map[string]string),
 	}
 	for _, lead := range out.Document.Leads {
-		r.Leads = append(r.Leads, lead.Text)
+		var l Llead
+		err = xml.Unmarshal([]byte(lead.Text), &l)
+		r.Leads = append(r.Leads, l.Text)
 	}
 
 	for _, fact := range out.Document.Facts.Facts {
