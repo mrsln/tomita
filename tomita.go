@@ -148,5 +148,7 @@ func (tp *Parser) Run(text string) (Result, error) {
 		}
 	}
 
+	cmd.Wait()
+
 	return r, nil
 }
